@@ -31,24 +31,6 @@ export default class TruckMapContainer extends React.Component {
 		  console.log(this.state)
 		  console.log(this.props)
 		}
-
-	  onMarkerClick = (props, marker, e) => {
-		this.setState({
-			selectedPlace: props, 
-			activeMarker: marker, 
-			showingInfoWindow: true
-		})
-		
-	  }
-
-	  onClose = props => {
-		  if (this.state.showingInfoWindow){
-			  this.setState({
-				  showingInfoWindow: false, 
-				  activeMarker: null
-			  })
-		  }
-	  }
 	
 	  getGeoLocation = () => {
 		if (navigator.geolocation) {
@@ -83,16 +65,7 @@ export default class TruckMapContainer extends React.Component {
 				mapElement={<div style={{ height: `100%` }} />}
 				
 			>
-			<Marker
-				onClick={this.onMarkerClick}
-				name={'the spot'}
-			/>
-			<InfoWindow
-				marker={this.state.activeMarker}
-				visible={this.state.showinginforWindow}
-				onClose={this.onClose}
-				/>
-
+			
 			</TrucksMap>
 		)
 	}
