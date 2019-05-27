@@ -1,39 +1,53 @@
 import React from "react";
 import TrucksMap from "../Components/TrucksMap"
-import { withScriptjs, withGoogleMap, GoogleMap, Marker } from 'react-google-maps'; 
+import { withScriptjs, withGoogleMap, GoogleMap, Marker, InfoWindow } from 'react-google-maps'; 
 
 export default class TruckMapContainer extends React.Component {
 
-
-	
-	
 
 	state = {
 		currentLatLng: {
 			lat: 44.977753,
 			lng: -93.265015, 
 		}, 
-		isMarkerShown: false
+		isMarkerShown: false, 
+		activeMarker: {}, 
+		selectedPlace: {}
 	}
 	
-	componentWillUpdate(){
-		this.getGeoLocation()
-	  }
+	componentWillUpdate(){this.getGeoLocation()}
 	
-	  componentDidMount() {
-		this.delayedShowMarker()
-	  }
+	  componentDidMount() {this.delayedShowMarker()}
 	
 	  delayedShowMarker = () => {
 		setTimeout(() => {
 		  this.getGeoLocation()
 		  this.setState({ isMarkerShown: true })
-		}, 5000)
+		})
 	  }
 	
 	  handleMarkerClick = () => {
-		this.setState({ isMarkerShown: false })
-		this.delayedShowMarker()
+		  this.delayedShowMarker()
+		  console.log(this.state)
+		  console.log(this.props)
+		}
+
+	  onMarkerClick = (props, marker, e) => {
+		this.setState({
+			selectedPlace: props, 
+			activeMarker: marker, 
+			showingInfoWindow: true
+		})
+		
+	  }
+
+	  onClose = props => {
+		  if (this.state.showingInfoWindow){
+			  this.setState({
+				  showingInfoWindow: false, 
+				  activeMarker: null
+			  })
+		  }
 	  }
 	
 	  getGeoLocation = () => {
@@ -67,7 +81,19 @@ export default class TruckMapContainer extends React.Component {
 				loadingElement={<div style={{ height: `100%` }} />}
 				containerElement={<div style={{ height: `600px`, width: `600px` }} />}
 				mapElement={<div style={{ height: `100%` }} />}
+				
+			>
+			<Marker
+				onClick={this.onMarkerClick}
+				name={'the spot'}
 			/>
-		);
+			<InfoWindow
+				marker={this.state.activeMarker}
+				visible={this.state.showinginforWindow}
+				onClose={this.onClose}
+				/>
+
+			</TrucksMap>
+		)
 	}
 }
